@@ -1,0 +1,897 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Flutter Codelab I/O Extended: Creating Flutter Web Apps in the Google Cloud using Firebase Hosting</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="flutter-codelab-ioextended"
+                  title="Flutter Codelab I/O Extended: Creating Flutter Web Apps in the Google Cloud using Firebase Hosting"
+                  environment="web"
+                  feedback-link="https://romanjustcodes.web.app">
+    
+      <google-codelab-step label="Overview" duration="0">
+        <h2 is-upgraded>What You&#39;ll Build in this Workshop:</h2>
+<ul>
+<li>A simple Flutter Web App (Personal Portfolio Card App)</li>
+<li>Create Flutter User interfaces with ease</li>
+<li>Common Flutter Layout strategies using just core widgets</li>
+<li>Implementing Explicit Animations</li>
+<li>Import network images</li>
+<li>Using Material Icon fonts</li>
+<li>Hosting your Flutter Web App in the Google Cloud via Firebase Hosting</li>
+</ul>
+<p class="image-container"><img alt="Full Application" src="img/4bd73e2bbf15031b.gif"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Pre-requisites" duration="0">
+        <ul>
+<li>Download and installing the <a href="https://docs.flutter.dev/get-started/install" target="_blank">Flutter framework</a></li>
+<li>Have <a href="https://nodejs.org/en/download/" target="_blank">NPM package manager</a> installed on your machine</li>
+<li>Have <a href="https://code.visualstudio.com/" target="_blank">VS code</a> installed on your machine</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create a Flutter Project" duration="0">
+        <p>In order to create a Flutter project for the first time, navigate to the folder location where you want the project to reside, and run the command <code>flutter create</code> plus the name of the project, as such:</p>
+<pre><code language="language-flutter" class="language-flutter">flutter create &lt;YOURNAME&gt;_portfolio
+
+</code></pre>
+<p>This will create a project called <strong><em>YOURNAME_portfolio</em></strong> which will be the starting point for this project.</p>
+<p>Navigate to the root of the project by running the command <code>cd YOURNAME_portfolio</code> since that&#39;s where the main files are located.</p>
+<p>The project is ready, so let&#39;s dive right in!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Start Building the Main App Widget" duration="0">
+        <p>With the project ready, let&#39;s locate the <strong>main.dart</strong> file, which is the starting file of your Flutter app. It should be inside the root&#39;s folder, inside a subfolder called <strong>lib</strong>.</p>
+<p>First things first, in the <strong>main.dart</strong> file, clean the contents of this file as you get some boilerplate code that we don&#39;t want. Make sure you&#39;re importing the <strong>Material</strong> library as the first line in the file, as such:</p>
+<pre><code language="language-flutter" class="language-flutter">import &#39;package:flutter/material.dart&#39;;
+
+</code></pre>
+<p>Let&#39;s lay down the root widget of this app. Implement the first method of the app, the <strong>void main()</strong> method, which is the most important method in a Flutter app as it bootstraps it and installs the root widget. Inside the <strong>main</strong> method, call the first framework method, the <strong>runApp</strong> method, and inside it, install the root widget (no worries, it doesn&#39;t exist yet - still go ahead and add it) which will be called <strong>PersonalPortfolioApp</strong>:</p>
+<pre><code language="language-flutter" class="language-flutter">void main() {
+  runApp(const PersonalPortfolioApp());
+}
+
+</code></pre>
+<aside class="special"><p>NOTE: Instantiate the widget as a <strong>const</strong> for performance reasons, as Flutter will mark this widget as not needing rebuilding in the next refresh frame pass.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Create the PersonalPortfolioApp Widget" duration="0">
+        <p>Creating a custom widget is a matter of just creating a class that extends either <strong>StatefulWidget</strong> or <strong>StatelessWidget</strong>. In our case, we want this widget to be <strong>Stateless</strong> as it will not maintain state and will only render the root widget. Follow the links for more info on <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html" target="_blank"><strong>StatefulWidget</strong></a> and <a href="https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html" target="_blank"><strong>StatelessWidget</strong></a>. Let&#39;s call it <strong>PersonalPortfolioApp</strong> and make it extend <strong>StatelessWidget</strong>.</p>
+<p>Override its <a href="https://api.flutter.dev/flutter/widgets/StatelessWidget/build.html" target="_blank"><strong>build</strong></a> method to let the Flutter framework know to call this method and build the widget hiearchy returned by this method. Return an object of type <strong>Widget</strong> and take in a <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html" target="_blank"><strong>BuildContext</strong></a> reference, as such:</p>
+<pre><code language="language-flutter" class="language-flutter">class PersonalPortfolioApp extends StatelessWidget {
+
+  const PersonalPortfolioApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: rest of the code here
+  }
+}
+
+</code></pre>
+<p>Inside the <strong>build</strong> method, return a widget of type <strong>MaterialApp</strong> - this is the widget that represents the Material library and all of the styles related to it, which will trickle down the hierarchy when placed this high in the hierarchy.</p>
+<p>Set the following properties as follows:</p>
+<ul>
+<li>debugShowCheckedModeBanner to false</li>
+<li>home: set it to be a <a href="https://api.flutter.dev/flutter/material/Scaffold-class.html" target="_blank"><strong>Scaffold</strong></a> widget; this widget will represent the foundation of a page and the basic material design visual layout structure. As the <strong>body</strong> of the <strong>Scaffold</strong>, set a <strong>Center</strong> widget that wraps yet another non-existing widget called <strong>PersonalPortfolio</strong> - this widget will encapsulate the core functionality of our simple web app.</li>
+</ul>
+<p>Your code should look like this:</p>
+<pre><code language="language-flutter" class="language-flutter">// INSIDE THE BUILD METHOD...
+
+return const MaterialApp(
+  debugShowCheckedModeBanner: false,
+  home: Scaffold(
+    body: Center(
+      child: PersonalPortfolio(),
+    ),
+  ),
+);
+
+</code></pre>
+<p>Let&#39;s proceed with creating the <strong>PersonalPortfolio</strong> custom widget as a <strong>StatefulWidget</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating the PersonalPortfolio custom widget" duration="0">
+        <p>We create the <strong>PersonalPortfolio</strong> widget as a <strong>StatefulWidget</strong> this time around, since we will be rebuilding it rapidly as its properties change as a result of an animation we&#39;ll create in just a minute - this is one of the cases for having a <strong>StatefulWidget</strong>; other cases involve for example if we want to reflect a change in some piece of data being provided to this widget, etc.</p>
+<p>Proceed to create a class called <strong>PersonalPortfolio</strong> and make it extend <strong>StatefulWidget</strong>. Note that creating a <strong>StatefulWidget</strong> is a two-step process: first create the <strong>StatefulWidget</strong> class, which overrides its <strong>createState</strong> method and returns an instance of <strong>State</strong>, strongly-typed to the <strong>StatefulWidget</strong> class, as such:</p>
+<pre><code language="language-flutter" class="language-flutter">class PersonalPortfolio extends StatefulWidget {
+
+  const PersonalPortfolio({Key? key}) : super(key: key);
+
+  @override
+  PersonalPortfolioState createState() =&gt; PersonalPortfolioState();
+}
+
+</code></pre>
+<p>Then create the corresponding <strong>State</strong> class, called <strong>PersonalPortfolioState</strong>, which extends <strong>State&lt;PersonalPortfolio&gt;</strong>, right below it; this is where the state will be maintained as the widget rebuilds. Override its <strong>build</strong> method, returning a <strong>Widget</strong> instance and passing a <strong>BuildContext</strong> instance to it:</p>
+<pre><code language="language-flutter" class="language-flutter">class PersonalPortfolioState extends State&lt;PersonalPortfolio&gt; {
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: rest of the code here
+  }
+}
+
+</code></pre>
+<p>Now let&#39;s focus on the structure of the <strong>PersonalPortfolio</strong> widget.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Build the structure of the PersonalPortfolio" duration="0">
+        <p>The following is a schematics view of what we&#39;ll be building in this section:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/a08f3a9ab634f77e.png"></p>
+<p>Let&#39;s dig right in!</p>
+<p>At the top of the <strong>PersonalPortfolioState</strong> class, create a local property called <strong>appColor</strong>, type <strong>Color</strong> and <strong>final</strong>; assign your favorite color from the predefined list of colors available in Flutter - besides, this is your portfolio so make it personal!. I&#39;ll set it to be <strong>Colors.blueAccent</strong> - one of my favorites:</p>
+<pre><code language="language-flutter" class="language-flutter">final Color appColor = Colors.blueAccent;
+
+</code></pre>
+<p>We&#39;ll build the structure by starting at the top, returning a <strong>Center</strong> widget, wrapping a <strong>Column</strong> widget with the following specs:</p>
+<ul>
+<li>mainAxisSize: MainAxisSize.min</li>
+<li>mainAxisAlignment: align them centered vertically, using MainAxisAlignment.center</li>
+<li>crossAxisAlignment: align them centered horizontally, using CrossAxisAlignment.center</li>
+</ul>
+<p>Your code should look like this inside the <strong>build</strong> method:</p>
+<pre><code language="language-flutter" class="language-flutter">// INSIDE THE BUILD METHOD...
+return Center(
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: []
+  )
+);
+
+</code></pre>
+<p>Let&#39;s continue by creating the container that will enclose the avatar image. But before we start, go and grab an image of yourself (i.e. from your Github profile, from your Gmail profile).</p>
+<p>Go, I&#39;ll wait.</p>
+<p>Did you get it? If not, this is how you get it from your <strong>Gmail</strong> profile:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/5d2f33e93794e43c.png"></p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/a5b2e8ebf5584b73.png"></p>
+<p>Now, after copying the image address, hold on to it on a variable at the top of the <strong>State</strong> class, which we&#39;ll call <strong>avatarImg</strong>, as such:</p>
+<pre><code language="language-flutter" class="language-flutter">final String avatarImg = &#39;&lt;YOUR_IMAGE_PATH&gt;&#39;;
+// in my case: https://lh3.googleusercontent.com/a-/AFdZucrm0yVENa6ZYGrpjjSpSVKV69oQik_dCg6G86BrYVA=s288-p-rw-no
+
+</code></pre>
+<p>Now let&#39;s create the <strong>Container</strong> widget, with the following specs:</p>
+<ul>
+<li>100px of width and height for its dimensions</li>
+<li>20px of margin only at the bottom</li>
+<li>set its <strong>decoration</strong> property to add the following:  <ul>
+<li>borderRadius of 50px all around it</li>
+<li>set its <strong>image</strong> to a <strong>NetworkImage</strong> widget and set its URL to be the <strong>avatarImg</strong> property set earlier, with a fit of <strong>BoxFit.cover</strong></li>
+<li>a border all around it, with color set to <strong>appColor</strong> and width of 8px of border</li>
+</ul>
+</li>
+</ul>
+<p>Your code should look like this afterwards:</p>
+<pre><code language="language-flutter" class="language-flutter">Container(
+  width: 100,
+  height: 100,
+  margin: const EdgeInsets.only(bottom: 20),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(50),
+    image: DecorationImage(
+      image: NetworkImage(avatarImg),
+      fit: BoxFit.cover
+    ),
+    border: Border.all(
+      color: appColor,
+      width: 8
+    )
+  )
+)
+
+</code></pre>
+<p>Right under this <strong>Container</strong>, proceed to add two <strong>Text</strong> widgets with the following specs:</p>
+<ul>
+<li>first <strong>Text</strong> widget, set it to be your name, followed by a <strong>TextStyle</strong> having as the color your *<em>appColor</em>, 20px of font size and bold as its thickness</li>
+<li>second <strong>Text</strong> widget, make it <strong>const</strong> and add a title of your choice; we&#39;ll use the inherited styles</li>
+<li>the spacing will consist of a <strong>SizedBox</strong> with 20px height</li>
+</ul>
+<p>Your structure should look like this:</p>
+<pre><code language="language-flutter" class="language-flutter">// UNDER THE ABOVE CONTAINER...
+
+Text(&#39;Roman Jaquez&#39;, 
+  style: TextStyle(
+    color: appColor, 
+    fontSize: 20, 
+    fontWeight: FontWeight.bold
+  )
+),
+const Text(&#39;Flutter GDE / Cloud Architect&#39;),
+const SizedBox(height: 20),
+
+</code></pre>
+<p>Last in the structure, let&#39;s add a <strong>TextButton</strong> widget, in which we&#39;ll create a little structure representing a piece of contact information (our email), as such:</p>
+<ul>
+<li>set the <strong>onPressed</strong> method in the <strong>TextButton</strong> to an empty callback for now</li>
+<li>as <strong>child</strong> of the button, set it as a <strong>Row</strong> widget since we want to lay out our widgets horizontally:  <ul>
+<li>set the <strong>mainAxisSize</strong> and <strong>mainAxisAlignment</strong> on the <strong>Row</strong> as <strong>MainAxisSize.min</strong> and <strong>MainAxisAlignment.center</strong> respectively</li>
+<li>as <strong>children</strong> of the <strong>Row</strong>, add an array of widgets, in the following order:</li>
+<li>first, an <strong>Icon</strong> widget set to <strong>Icons.email</strong>, with color <strong>appColor</strong></li>
+<li>second, a <strong>const SizedBox</strong> with 10px width</li>
+<li>third, a <strong>Text</strong> widget with your email, with color <strong>apColor</strong> as its <strong>TextStyle</strong></li>
+</ul>
+</li>
+</ul>
+<p>Your <strong>TextButton</strong> should look like this in the end:</p>
+<pre><code language="language-flutter" class="language-flutter">TextButton(
+  onPressed: () {},
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(Icons.email, color: appColor),
+      const SizedBox(width: 10),
+      Text(&#39;romanejaquez@gmail.com&#39;, style: TextStyle(color: appColor))
+    ]
+  )
+),
+
+</code></pre>
+<aside class="special"><p>Feel free to add more of these <strong>TextButton</strong> widgets as you see fit, to represent each piece of contact information pertaining to you.</p>
+</aside>
+<p>Rebuild your app and verify the basic structure is in place!</p>
+<p>At this point you&#39;re good - if you want to skip the next step, it&#39;s up to you - but the next one is pretty interesting: it&#39;s all about animating your widgets! Proceed with caution as your mind will be blown - don&#39;t say I didn&#39;t warn you!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="BONUS #1: Add Animation to your widgets" duration="0">
+        <p>We&#39;ll be dealing with one of most exciting features in Flutter, which is its capabilities of implementing and achieving those buttery-smooth 60 fps animations that will give your apps an extra punch and an edge over others.</p>
+<p>Let&#39;s proceed!</p>
+<p>We&#39;ll add a glowing effect to the avatar image we just created inside a <strong>Container</strong> widget. We will be using <a href="https://docs.flutter.dev/codelabs/explicit-animations" target="_blank"><strong>explicit</strong></a> animations for this, as we&#39;d like more control over the animation sequence.</p>
+<p>Start by adding a <a href="https://flutterbyexample.com/lesson/mixins/" target="_blank"><strong>mixin</strong></a>, which is a way to add further capabilities to your existing widget classes via special constructs without incurring in multiple inheritance. The mixin is called <strong>TickerProviderStateMixin</strong> and you implement it by adding at the end of the class definition with the <strong>with</strong> keyword, as in:</p>
+<pre><code language="language-flutter" class="language-flutter">class PersonalPortfolioState extends State&lt;PersonalPortfolio&gt; with TickerProviderStateMixin {
+
+  //... rest of the code omitted for brevity
+
+}
+
+</code></pre>
+<aside class="special"><p>The capability that <strong>TickerProviderStateMixin</strong> provides to our <strong>StatefulWidget</strong>&#39;s <strong>State</strong> is a <strong>Ticker</strong> instance, which is a way to tap into Flutter&#39;s inner synchronization mechanism by setting a callback to it that will be called once per animation frame. This will be consumed by an <strong>AnimationController</strong>, which we&#39;ll introduce in a minute.</p>
+</aside>
+<p>In order to control the animation&#39;s lifecycle, play the animation, define the upper and lower bounds of the animation, we need an <strong>AnimationController</strong> instance. Create a <strong>late AnimationController</strong> reference at the top of the <strong>State</strong> class, call it <strong>ctrl</strong>.</p>
+<pre><code language="language-flutter" class="language-flutter">late AnimationController ctrl;
+
+</code></pre>
+<p>Override the <strong>State</strong>&#39;s <strong>initState</strong> method; this is where you&#39;ll instantiate the <strong>ctrl AnimationController</strong> instance. To the instance, set its <strong>vsync</strong> to <strong>this</strong>, and a constant <strong>duration</strong> of 2 seconds. To the resulting instance, call its <strong>repeat</strong> method; this means the animation, wherever applied, will last 2 seconds, then repeat itself infinitely unless explicitly stopped.</p>
+<p>Your <strong>initState</strong> method should look as follows:</p>
+<pre><code language="language-flutter" class="language-flutter">@override
+void initState() {
+  super.initState();
+  ctrl = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 2)
+  )..repeat();
+}
+
+</code></pre>
+<p>As a best practice, don&#39;t forget to dispose of the controller used in the animation in the <strong>State</strong> class&#39; <strong>dispose</strong> method, as such:</p>
+<pre><code language="language-flutter" class="language-flutter">@override
+void dispose() {
+  ctrl.dispose();
+  super.dispose();
+}
+
+</code></pre>
+<p>With this in place, let&#39;s do some refactoring to our widget structure to add the glowing animation. This animation will be handled by a <strong>Container</strong> widget that will be placed right behind the existing <strong>Container</strong> holding the image, to which we&#39;ll attach the <strong>Animation</strong> controller with a scaling and a fading transition, causing the glowing effect. Let&#39;s proceed.</p>
+<p>Wrap the existing <strong>Container</strong> widget holding the image inside a <strong>Stack</strong> widget and set it as its child; this is what will cause the stacking of the two containers in question. Inside the <strong>Stack</strong> children property, add another <strong>Container</strong> on top of the existing <strong>Container</strong> with the following specs:</p>
+<ul>
+<li>100px width and height</li>
+<li>decoration with its <strong>color</strong> set to <strong>appColor</strong> and <strong>borderRadius</strong> to 5px</li>
+</ul>
+<p>The structure around the existing <strong>Container</strong> should look like this:</p>
+<pre><code language="language-flutter" class="language-flutter">//... rest of the code omitted for brevity...
+
+Stack(
+  children: [
+    // the glowing circle
+    Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        color: appColor,
+        borderRadius: BorderRadius.circular(50),
+      )
+    ),
+    // the avatar image container
+    Container(
+      width: 100,
+      height: 100,
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        image: DecorationImage(
+          image: NetworkImage(avatarImg),
+          fit: BoxFit.cover
+        ),
+        border: Border.all(
+          color: appColor,
+          width: 8
+        )
+      )
+    )
+  ]
+),
+
+</code></pre>
+<p>Now let&#39;s apply a scale transition animation to the newly added <strong>Container</strong> widget by wrapping it inside a <strong>ScaleTransition</strong> widget and setting the following properties:</p>
+<ul>
+<li>scale: a <strong>Tween</strong> instance, type <strong>double</strong>, beginning at 1.0 and ending at 1.5 of its original size</li>
+<li>to the resulting <strong>Tween</strong> instance, call its <strong>animate</strong> method, passing to it a <strong>CurvedAnimation</strong> instance; set its <strong>parent</strong> property to the animation controller above (<strong>ctrl</strong>) and a curve of <strong>Curves.easeInOut</strong>.</li>
+</ul>
+<p>Your code should look as follows:</p>
+<pre><code language="language-flutter" class="language-flutter">ScaleTransition(
+  scale: Tween&lt;double&gt;(begin: 1.0, end: 1.5).
+  animate(CurvedAnimation(parent: ctrl, curve: Curves.easeInOut)),
+  child: Container(
+    width: 100,
+    height: 100,
+    decoration: BoxDecoration(
+      color: Colors.blueAccent,
+      borderRadius: BorderRadius.circular(50),
+    )
+  ) 
+) 
+
+</code></pre>
+<p>To top it off, add a fading transition animation by wrapping the existing <strong>ScaleTransition</strong> widget into yet another widget, a <strong>FadeTransition</strong> widget; set its properties as such:</p>
+<ul>
+<li>opacity: a <strong>Tween</strong> instance, type <strong>double</strong>, beginning at 1.0 (full opacity) and ending in 0.0 (invisible)</li>
+<li>to the resulting <strong>Tween</strong> instance, call its <strong>animate</strong> method, passing to it a <strong>CurvedAnimation</strong> instance; set its <strong>parent</strong> property to the animation controller above (<strong>ctrl</strong>) and a curve of <strong>Curves.easeInOut</strong>.</li>
+</ul>
+<p>In the end, your code should look like:</p>
+<pre><code language="language-flutter" class="language-flutter">FadeTransition(
+  opacity: Tween&lt;double&gt;(begin: 1.0, end: 0.0)
+  .animate(CurvedAnimation(parent: ctrl, curve: Curves.easeInOut)),
+  child: ScaleTransition(
+    //.. rest of the code omitted
+  )
+)
+
+</code></pre>
+<p>Take it for a spin and you should see the glowing animation effect right from behind the avatar image - pretty neat!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="BONUS #2: Add Animation to the whole card container" duration="0">
+        <p class="image-container"><img alt="PersonalPortfolio" src="img/7bf67d05f1d46350.png"></p>
+<p>You can implement animations to whole widget structures as well! Let&#39;s try implementing an animation to the whole portfolio card widget we&#39;ve created.</p>
+<p>Let&#39;s start!</p>
+<p>We&#39;ll proceed the same way we did with the glowing effect we applied on the <strong>Container</strong> widget from before.</p>
+<p>Let&#39;s create one additional <strong>AnimationController</strong> as we want to control the animation and give it a different duration speed. At the top, right below the existing one, create a new <strong>AnimationController</strong> called <strong>contentCtrl</strong>:</p>
+<pre><code language="language-flutter" class="language-flutter">late AnimationController contentCtrl;
+
+</code></pre>
+<p>In the same <strong>initState</strong> method, initialize that instance, feeding the <strong>this</strong> reference to the <strong>vsync</strong> parameter, and as its duration, set it to be a <strong>const Duration</strong> with a 3-second duration. To the resulting instance, call the <strong>forward</strong> method, as we only want it to be executed in a forward fashion only once, as such:</p>
+<pre><code language="language-flutter" class="language-flutter">@override
+void initState() {
+  
+  //... previous code omitted for brevity
+  
+  contentCtrl = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 3)
+  )..forward();
+}
+
+</code></pre>
+<p>As customary, call <strong>dispose</strong> on its instance in the widget&#39;s <strong>dispose</strong>:</p>
+<pre><code language="language-flutter" class="language-flutter">@override
+void dispose() {
+
+  //... previous code omitted for brevity
+
+  contentCtrl.dispose();
+}
+
+</code></pre>
+<p>Since we want our portfolio widget to slide from the bottom, wrap the whole structure (the <strong>Center</strong> widget containing the whole <strong>Column</strong>) inside a <strong>SlideTransitionWidget</strong>; to make it slide from the bottom up, set its <strong>position</strong> property to be an <strong>Animation</strong> type <strong>Offset</strong>, generated from a <strong>Tween</strong> instance&#39;s <strong>animate</strong> method of the same type, as follows:</p>
+<pre><code language="language-flutter" class="language-flutter">// INSIDE THE BUILD METHOD...
+ 
+return SlideTransition(
+  position: Tween&lt;Offset&gt;(begin: const Offset(0.0, 0.125), end: Offset.zero)
+  .animate(CurvedAnimation(parent: contentCtrl, curve: Curves.easeInOut)),
+  child: Center(
+    // ... rest of the code omitted for brevity
+  )
+);
+
+</code></pre>
+<aside class="special"><p>Notice how we applied the newly created <strong>AnimationController contentCtrl</strong> in the <strong>CurvedAnimation</strong> of our <strong>SlideTransition</strong>; you could&#39;ve reused the previous controller if you wished.</p>
+</aside>
+<p>We also want to apply a fading animation by leveraging the same animation controller but applied to a <strong>FadeTransition</strong> widget. Wrap the existing <strong>SlideTransition</strong> widget inside a <strong>FadeTransition</strong> widget and set its <strong>opacity</strong> property accordingly:</p>
+<pre><code language="language-flutter" class="language-flutter">return FadeTransition(
+  opacity: Tween&lt;double&gt;(begin: 0.0, end: 1.0)
+  .animate(CurvedAnimation(parent: contentCtrl, curve: Curves.easeInOut)),
+  child: SlideTransition(
+    // ... rest of the code omitted for brevity
+  )
+);
+
+</code></pre>
+<p>Now, rebuild and reload your Flutter web app and you should see it slide from the bottom of the screen in a smooth fading animation - nice and smooth!</p>
+<p>Here&#39;s the complete code with animations and all - enjoy!</p>
+<h2 is-upgraded>Complete Code</h2>
+<pre><code language="language-flutter" class="language-flutter">import &#39;package:flutter/material.dart&#39;;
+
+void main() {
+  runApp(const PersonalPortfolioApp());
+}
+
+class PersonalPortfolioApp extends StatelessWidget {
+
+  const PersonalPortfolioApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: PersonalPortfolio(),
+        ),
+      ),
+    );
+  }
+}
+
+class PersonalPortfolio extends StatefulWidget {
+
+  const PersonalPortfolio({Key? key}) : super(key: key);
+
+  
+  @override
+  PersonalPortfolioState createState() =&gt; PersonalPortfolioState();
+}
+
+class PersonalPortfolioState extends State&lt;PersonalPortfolio&gt; with TickerProviderStateMixin {
+  
+  final Color appColor = Colors.blueAccent;
+  final String avatarImg = &#39;https://lh3.googleusercontent.com/a-/AFdZucrm0yVENa6ZYGrpjjSpSVKV69oQik_dCg6G86BrYVA=s288-p-rw-no&#39;;
+
+  late AnimationController ctrl;
+  late AnimationController contentCtrl;
+  
+  @override
+  void initState() {
+    super.initState();
+    ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2)
+    )..repeat();
+    
+    contentCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3)
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    ctrl.dispose();
+    contentCtrl.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: Tween&lt;double&gt;(begin: 0.0, end: 1.0)
+      .animate(CurvedAnimation(parent: contentCtrl, curve: Curves.easeInOut)),
+      child: SlideTransition(
+      position: Tween&lt;Offset&gt;(begin: const Offset(0.0, 0.125), end: Offset.zero)
+      .animate(CurvedAnimation(parent: contentCtrl, curve: Curves.easeInOut)),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                FadeTransition(
+                  opacity: Tween&lt;double&gt;(begin: 1.0, end: 0.0)
+                  .animate(CurvedAnimation(parent: ctrl, curve: Curves.easeInOut)),
+                  child: ScaleTransition(
+                  scale: Tween&lt;double&gt;(begin: 1.0, end: 1.5).
+                  animate(CurvedAnimation(parent: ctrl, curve: Curves.easeInOut)),
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: appColor,
+                      borderRadius: BorderRadius.circular(50),
+                    )
+                  ) 
+                ) 
+                ),
+                Container(
+                  width: 100,
+                  height: 100,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    image: DecorationImage(
+                      image: NetworkImage(avatarImg),
+                      fit: BoxFit.cover
+                    ),
+                    border: Border.all(
+                      color: appColor,
+                      width: 8
+                    )
+                  )
+                )
+              ] 
+            ),
+            Text(&#39;Roman Jaquez&#39;, 
+              style: TextStyle(
+                color: appColor, 
+                fontSize: 20, 
+                fontWeight: FontWeight.bold
+              )
+            ),
+            const Text(&#39;Flutter GDE / Cloud Architect&#39;),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.email, color: appColor),
+                  const SizedBox(width: 10),
+                  Text(&#39;romanejaquez@gmail.com&#39;, style: TextStyle(color: appColor))
+                ]
+              )
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: () {},
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.language, color: Colors.blueAccent),
+                SizedBox(width: 10),
+                Text(&#39;romanjustcodes.web.app&#39;, style: TextStyle(color: Colors.blueAccent))
+              ]
+            )
+            )
+          ]
+        )
+      )
+    )
+    );
+  }
+}
+
+
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Hosting your Flutter Web App on Firebase: Setup" duration="0">
+        <p>It&#39;s time to make our Flutter web app masterpiece available for the whole world to appreciate, by publishing it to <a href="https://firebase.google.com/docs/hosting" target="_blank">Firebase Hosting</a> - a production-grade web content hosting for developers. With a single command, you can quickly deploy web apps and serve both static and dynamic content to a global CDN (content delivery network).</p>
+<p>For this exercise, we will use both the Firebase Console, a web-based GUI for managing your Firebase projects as well as the Firebase CLI,  which provides a set of command-line-based tools for managing, viewing and deploying to Firebase projects.</p>
+<p>Let&#39;s first create our first Firebase project via the Console.</p>
+<p>Navigate to <a href="https://console.firebase.google.com/u/0/" target="_blank">console.firebase.google.com</a> which is the web-based tool for managing your Firebase project.</p>
+<p>To create your first project, click on the &#34;Create Project&#34; button.</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/ee65a44d389d6d43.png"></p>
+<p>Go through the steps on creating your project, starting with a valid project name (ie. since this will be a personal portfolio web app, you can call it &#34;yourname-portfolio-app&#34; - hopefully is not taken!). Make sure to accept the terms and usage:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/cc10f9026b9668fc.png"></p>
+<p>Disable the toggle for &#34;Enable Google Analytics for this project&#34; - we don&#39;t need it for our case, but you can enable it later:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/d13b07fb13ca6da0.png"></p>
+<p>And with that, your project starts to get provisioned in the Google Cloud; please wait until it gets created:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/da46db44f0fe0f72.png"></p>
+<p>Your project is ready! click &#34;Continue&#34;:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/5e89f5cb0bafc2c9.png"></p>
+<p>In the landing page of your Firebase console, locate the &#34;Hosting&#34; menu item on the left hand side. Go ahead and navigate to it:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/ca94434c75104726.png"></p>
+<p>This should take you to the Hosting section of the Firebase console, where you manage your hosting configuration. Click on &#34;Get Started&#34; to proceed:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/2c150c14269526c0.png"></p>
+<p>The next steps are more explanatory to tell you what things you need to configure in your machine to deploy your web app to Firebase Hosting and the tools you need to install to accomplish that. First step instructs you to install the Firebase CLI:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/61956e7b3f3e0126.png"></p>
+<p>Next step shows you how to authenticate against Firebase from the CLI and how to initialize your environment and configure it for Firebase deployments:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/fdb61cdd73d76785.png"></p>
+<p>And the last step shows you the command to run when ready to deploy your project to Firebase Hosting. Afterwards, click &#34;Continue to console&#34; to proceed:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/9c55d031c00e16b0.png"></p>
+<p>With that in place, let&#39;s proceed to configure the Firebase CLI.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Hosting your Flutter Web App on Firebase: Configuration" duration="0">
+        <aside class="warning"><p>Prerequisites: For the next steps must have <strong>NodeJS</strong> and <strong>NPM</strong> installed on your machine, as well as the <a href="https://firebase.google.com/docs/cli" target="_blank">Firebase CLI</a>.</p>
+</aside>
+<p>If you haven&#39;t installed it, go ahead and run the following installation command:</p>
+<pre><code language="language-flutter" class="language-flutter">npm install -g firebase-tools
+</code></pre>
+<aside class="special"><p>The Firebase CLI requires a browser to complete authentication, but the CLI is fully compatible with CI and other headless environments.</p>
+</aside>
+<p>After installing the CLI, you must authenticate. Run the following command:</p>
+<pre><code language="language-flutter" class="language-flutter">firebase login
+
+</code></pre>
+<p>This should initiate the process and present you with the first prompt, asking you to allow Firebase to collect CLI reporting information. You can select either option - go ahead and type ‘Y&#39;:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/388f2063ef1b690.png"></p>
+<p>Because you are running this on a machine that has a browser, this automatically launches a browser window where the authentication flow must be completed. Use the same Gmail Account you use to go to the Firebase Console under which you created the project:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/4c2087d3045c4a9d.png"></p>
+<p>Click on &#34;Allow&#34; to allow the Firebase CLI access to your Google account:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/ff357b65d54df798.png"></p>
+<p>After successfully allowing and completing the authentication, feel free to close this browser window:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/c546594be20b26df.png"></p>
+<p>Going back to the command line, you should see the following message, also confirming successful authentication:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/6725c8d63a01e89e.png"></p>
+<h2 is-upgraded>Initialize the Firebase environment</h2>
+<p>Proceed to now to run the following command to initialize the project as a Firebase environment:</p>
+<pre><code language="language-flutter" class="language-flutter">firebase init
+
+</code></pre>
+<p>This should present you with a series of prompts to properly configure the project; the first option is the Firebase feature you want to set up; in our case, select the <strong><em>&#34;Hosting: Configure files for Firebase Hosting and (optionally) set up Github Action deploys&#34;</em></strong>:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/4c5ae56a7acf270.png"></p>
+<aside class="special"><p>Use the arrow keys on your keyboard to navigate through the options as well as the space bar to make a selection, then <strong>Enter</strong> to proceed.</p>
+</aside>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/d85f75e7143816bc.png"></p>
+<p>Next, select the Firebase project you want to associate this project directory. Select <strong>&#34;Use an existing project&#34;</strong>:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/30017791315b1ed1.png"></p>
+<p>Then, go ahead and navigate to your particular project.</p>
+<p>Next, as the directory that Firebase will use to grab your web-generated files for deployment, set it to be the <strong>build/web</strong> folder - this is the default location where Flutter web publishes your assets ready to be deployed on a web server:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/7caba990b0fb2d07.png"></p>
+<p>Next, make sure to type ‘y&#39; in the option to configure your web app as a single-page app:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/bce3213a90c41761.png"></p>
+<p>Say ‘N&#39; when it comes to setting up automatic builds and deploys with Github:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/555a1cd030e668e6.png"></p>
+<p>Do not override the existing <strong>index.html</strong> located in the <strong>build/web</strong> folder, so say ‘N&#39; for this option:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/c4bb4178eb1a0555.png"></p>
+<p>After that last option, confirm that you get a message saying <strong>&#34;Firebase initialization complete&#34;</strong> in the command line:</p>
+<p class="image-container"><img alt="PersonalPortfolio" src="img/f665e8ae14ea98b9.png"></p>
+<p>Notice a few files that get generated as a result of initializing Firebase in this project: a file called <strong>.firebaserc</strong> and a <strong>firebase.json</strong>, which are files containing the configuration collected during init, and needed to connect to Firebase and deploy our web app.</p>
+<p>Let&#39;s proceed to the next step, which is the actual deployment.</p>
+<p>Hosting your Flutter Web App on Firebase: Deployment</p>
+<p>Let&#39;s now deploy our newly minted Flutter Web App.</p>
+<p>Make sure you are at the root of the project where the <strong>.firebaserc</strong> and a <strong>firebase.json</strong> are located.</p>
+<h2 is-upgraded>Build your Flutter web app</h2>
+<p>First, you must build the Flutter web app so it generates web-compatible files out of your Flutter code. Run the following command:</p>
+<pre><code language="language-flutter" class="language-flutter">flutter build web --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --release
+
+</code></pre>
+<p>Verify that the project has been built by navigating to the <strong>build/web</strong> folder.</p>
+<p>Now, all we need to do is run the following command to deploy your web project to firebase:</p>
+<pre><code language="language-flutter" class="language-flutter">firebase deploy
+
+</code></pre>
+<p>After a little bit, you should get a message confirming that the deployment is complete. The Firebase CLI should generate a Hosting URL, where your web app is deployed. Navigate to that URL and confirm your web page is live and public.</p>
+<p class="image-container"><img alt="Full Application" src="img/4bd73e2bbf15031b.gif"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Wrap-up" duration="0">
+        <p>And with that, we&#39;re done with this codelab for this workshop, where we accomplished the following:</p>
+<ul>
+<li>A simple Flutter Web App (Personal Portfolio Card App)</li>
+<li>Create Flutter User interfaces with ease</li>
+<li>Common Flutter Layout strategies using just core widgets</li>
+<li>Implementing Explicit Animations</li>
+<li>Import network images</li>
+<li>Using Material Icon fonts</li>
+<li>Hosting your Flutter Web App in the Google Cloud via Firebase Hosting</li>
+</ul>
+<h3 is-upgraded>Please don&#39;t forget to follow me on social media:</h3>
+<ul>
+<li>On Twitter (<a href="https://www.twitter.com/drcoderz" target="_blank">@drcoderz</a>)</li>
+<li>On YouTube (<a href="https://www.youtube.com/channel/UCKsp3r1ERjCpKJtD2n5WtPg" target="_blank">Roman Just Codes</a>)</li>
+<li>On My <a href="https://romanjustcodes.web.app/#/home" target="_blank">Personal Portfolio</a></li>
+<li>On <a href="https://medium.com/@romanejaquez" target="_blank">Medium</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Complete Code" duration="0">
+        <p>In case you fell behind on this codelab, below is the whole code for this codelab in a way you can copy / paste directly into DartPad:</p>
+<pre><code language="language-flutter" class="language-flutter">import &#39;package:flutter/material.dart&#39;;
+
+void main() {
+  runApp(const PersonalPortfolioApp());
+}
+
+class PersonalPortfolioApp extends StatelessWidget {
+
+  const PersonalPortfolioApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: PersonalPortfolio(),
+        ),
+      ),
+    );
+  }
+}
+
+class PersonalPortfolio extends StatefulWidget {
+
+  const PersonalPortfolio({Key? key}) : super(key: key);
+
+  
+  @override
+  PersonalPortfolioState createState() =&gt; PersonalPortfolioState();
+}
+
+class PersonalPortfolioState extends State&lt;PersonalPortfolio&gt; with TickerProviderStateMixin {
+  
+  final Color appColor = Colors.blueAccent;
+  final String avatarImg = &#39;https://lh3.googleusercontent.com/a-/AFdZucrm0yVENa6ZYGrpjjSpSVKV69oQik_dCg6G86BrYVA=s288-p-rw-no&#39;;
+
+  late AnimationController ctrl;
+  late AnimationController contentCtrl;
+  
+  @override
+  void initState() {
+    super.initState();
+    ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2)
+    )..repeat();
+    
+    contentCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3)
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    ctrl.dispose();
+    contentCtrl.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: Tween&lt;double&gt;(begin: 0.0, end: 1.0)
+      .animate(CurvedAnimation(parent: contentCtrl, curve: Curves.easeInOut)),
+      child: SlideTransition(
+      position: Tween&lt;Offset&gt;(begin: const Offset(0.0, 0.125), end: Offset.zero)
+      .animate(CurvedAnimation(parent: contentCtrl, curve: Curves.easeInOut)),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                FadeTransition(
+                  opacity: Tween&lt;double&gt;(begin: 1.0, end: 0.0)
+                  .animate(CurvedAnimation(parent: ctrl, curve: Curves.easeInOut)),
+                  child: ScaleTransition(
+                  scale: Tween&lt;double&gt;(begin: 1.0, end: 1.5).
+                  animate(CurvedAnimation(parent: ctrl, curve: Curves.easeInOut)),
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: appColor,
+                      borderRadius: BorderRadius.circular(50),
+                    )
+                  ) 
+                ) 
+                ),
+                Container(
+                  width: 100,
+                  height: 100,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    image: DecorationImage(
+                      image: NetworkImage(avatarImg),
+                      fit: BoxFit.cover
+                    ),
+                    border: Border.all(
+                      color: appColor,
+                      width: 8
+                    )
+                  )
+                )
+              ] 
+            ),
+            Text(&#39;Roman Jaquez&#39;, 
+              style: TextStyle(
+                color: appColor, 
+                fontSize: 20, 
+                fontWeight: FontWeight.bold
+              )
+            ),
+            const Text(&#39;Flutter GDE / Cloud Architect&#39;),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.email, color: appColor),
+                  const SizedBox(width: 10),
+                  Text(&#39;romanejaquez@gmail.com&#39;, style: TextStyle(color: appColor))
+                ]
+              )
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: () {},
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.language, color: Colors.blueAccent),
+                SizedBox(width: 10),
+                Text(&#39;romanjustcodes.web.app&#39;, style: TextStyle(color: Colors.blueAccent))
+              ]
+            )
+            )
+          ]
+        )
+      )
+    )
+    );
+  }
+}
+
+
+</code></pre>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
